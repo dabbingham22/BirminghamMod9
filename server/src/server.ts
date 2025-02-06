@@ -15,10 +15,15 @@ app.use (express.static('../client/dist'));
 // TODO: Implement middleware for parsing JSON and urlencoded form data
 app.use (express.json());
 app.use (express.urlencoded({extended: true}));
-// TODO: Implement middleware to connect the routes
-app.use(routes);
 
-app.get('/weather', (_req: Request, res: Response) => res.sendFile(path.join('../client/server/src/routes/api/weatherRoutes.ts')));
-app.get('/html', (_req: Request, res: Response) => res.sendFile(path.join('../client/server/src/src/routes/htmlRoutes.ts'))
+// TODO: Implement middleware to connect the routes
+//app.use(routes);
+
+app.use(routes);
+//app.get('/weather', (_req: Request, res: Response) => res.sendFile(path.join('../client/server/src/routes/api/weatherRoutes.ts')));
+//app.get('/html', (_req: Request, res: Response) => res.sendFile(path.join('../client/server/src/src/routes/htmlRoutes.ts')));
+// app.get('/api', (_req: Request, res: Response) => {
+//     res.json
+// })
 // Start the server on the port
 app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`));
