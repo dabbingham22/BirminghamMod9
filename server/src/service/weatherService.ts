@@ -2,8 +2,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // TODO: Define an interface for the Coordinates object
+interface Coordinates {
+  lat: string,
+  lon: string,
+
+}
 
 // TODO: Define a class for the Weather object
+class weather = weather;
 
 // TODO: Complete the WeatherService class
 class WeatherService {
@@ -38,13 +44,21 @@ class WeatherService {
   // private buildForecastArray(currentWeather: Weather, weatherData: any[]) {}
     //
   // TODO: Complete getWeatherForCity method
-  async getWeatherForCity(city: string) {}
+  async getWeatherForCity(city: string) {
     //update the classes property of city
-    // this.city = city
+    //this.city = city
     //get coordinates based on the cityName
     // the method is this.fetchAndDestructureLocationData(); to get coordinates
     // await this.fetchWeatherData(pass coordinates to it)
     // return the weather
+    this.city = city;
+
+    this.fetchAndDestructureLocationData();
+
+    await this.fetchWeatherData(Coordinates);
+    
+    return weather;
+  }
 }
 
 export default new WeatherService();
