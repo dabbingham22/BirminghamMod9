@@ -1,4 +1,5 @@
 import {promises as fs} from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 // TODO: Define a City class with name and id properties
 class City {
@@ -26,7 +27,7 @@ class HistoryService {
 
   // TODO: Define a write method that writes the updated cities array to the searchHistory.json file
    private async write(cities: City[]) {
-      return await fs.writeFile('db/db.json', JSON.stringify(cities, null, '\t'));
+      return await fs.writeFile('searchHistory.json', JSON.stringify(cities, null, '\t'));
     };
   // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
     async getCities() {
@@ -34,8 +35,13 @@ class HistoryService {
         let parsedCities : City[];
 
         try {
+          if (typeof cities === 'string') {
           parsedCities = [].concat(JSON.parse(cities));
-        } catch (err) {
+        } else {
+          parsedCities = cities;
+        }
+      } 
+        catch (err) {
           parsedCities = [];
         }
 
@@ -45,13 +51,26 @@ class HistoryService {
   // TODO Define an addCity method that adds a city to the searchHistory.json file
     async addCity(city: string) {
       if (!city) {
-        throw new Error('state cannot be blank');
+        throw new Error('City cannot be blank');
       }
+      const id = uuidv4();
+      const newCity: City = new City(city, id);
+
+      const cities = await this.getCities();
+      
+      if (cities.find(oldCity => oldCity.city === city )){
+        throw new Error ('City already has been searched');
+      }
+      cities.push(newCity);
+      await this.write(cities);
     }
   // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
-    async removeCity(id: string) {
-      return await this.getCities()
-      
-};
+  async removeCity(id: string) {
+    const cities = await this.getCities();
+    const updatedCities = cities.filter(city => city.id !== id);
+    
+    await this.write(updatedCities);
+  }
 }
+
 export default new HistoryService();
