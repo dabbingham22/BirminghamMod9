@@ -109,13 +109,13 @@ class WeatherService {
     const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error ('Nework response was not ok');
+      throw new Error ('Network response was not ok');
     }
 
     const data = await response.json();
 
     const currentWeather = this.parseCurrentWeather(data);
-    const forecastArray = this.buildForecastArray(data.list);
+    const forecastArray = this.buildForecastArray(data.list[0],data.list);
     return {
       currentWeather,
       forecastArray
@@ -133,8 +133,9 @@ class WeatherService {
     const weatherInfo = response.list[0];
 
     const currentWeather = {
+      date: new Date().toISOString().split('T')[0],
       city: cityName,
-      temperature: weatherInfo.main.temperature,
+      temperature: weatherInfo.main.temp,
       humidity: weatherInfo.main.humidity,
       description: weatherInfo.weather[0].description,
       icon: weatherInfo.weather[0].icon,
@@ -143,9 +144,19 @@ class WeatherService {
   }
       
   // TODO: Complete buildForecastArray method
-  private buildForecastArray(weatherData: any[]): Forecast[] {
+  private buildForecastArray(currentWeather: Weather, weatherData: any[]): Forecast[] {
+  const forecastArray: Forecast[] = [currentWeather];
 
-  const forecastArray: Forecast[] = [];
+  // const currentForecast: Forecast = {
+  //   date: new Date().toISOString().split('T')[0],
+  //   temperature: currentWeather.temperature,
+  //   humidity: currentWeather.humidity,
+  //   windSpeed: currentWeather.windSpeed,
+  //   description: currentWeather.description,
+  //   icon: currentWeather.icon
+  // };
+
+  // forecastArray.push(currentForecast);
 
   for (let i = 1; i < weatherData.length; i++) {    
     const forecast = weatherData[i];
@@ -175,9 +186,10 @@ class WeatherService {
     // the method is this.fetchAndDestructureLocationData(); to get coordinates
     // await this.fetchWeatherData(pass coordinates to it)
     // return the weather
-    const Weather = await this.fetchWeatherData(Coordinates);
-    
-    return Weather;
+    const weather = await this.fetchWeatherData(Coordinates);
+
+
+    return weather;
   }
 }
 

@@ -9,14 +9,18 @@ router.post('/', async (req: Request, res: Response) => {
   const { cityName } = req.body;
   if(cityName) {
     try{
-      const weatherData = await WeatherService.getWeatherByCity(cityName);
+      const weatherData = await WeatherService.getWeatherForCity(cityName).then((data) =>{
+        res.json(data)
+    })
 
-      await WeatherService.addCityToHistory(cityName);
+      await HistoryService.addCity(cityName);
 
       return res.status(200).json(weatherData);
     } catch (error)
+    {
     console.error(error);
     return res.status(500).json({ message: 'Error getting weather data'})
+    }
   } else {
     return res.status(400).json({ message: 'The city name is required'})
   }
@@ -24,13 +28,9 @@ router.post('/', async (req: Request, res: Response) => {
   
 
   // TODO: GET weather data from city name
-  WeatherService.getWeatherForCity(cityName).then((data) =>{
+  // WeatherService.getWeatherForCity(cityName).then((data) =>{
     // fire the historyservice add city method and pass the city name to it
-    res.json(data) //returning weather data from the backend to the frontend
-  }  )
-
-
-
+    // res.json(data) //returning weather data from the backend to the frontend
   // different way 
   // const data = await WeatherService.getWeatherForCity(cityName);
   // res.json(data)

@@ -3,14 +3,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 // TODO: Define a City class with name and id properties
 class City {
-  city: string;
+  cityName: string;
   id: string;
 
   constructor(city: string, id:string) {
-    this.city = city;
+    this.cityName = city;
     this.id = id;
   }
-}
+};
+
 // TODO: Complete the HistoryService class
 class HistoryService {
   // TODO: Define a read method that reads from the searchHistory.json file
@@ -58,7 +59,7 @@ class HistoryService {
 
       const cities = await this.getCities();
       
-      if (cities.find(oldCity => oldCity.city === city )){
+      if (cities.find(oldCity => oldCity.cityName === city )){
         throw new Error ('City already has been searched');
       }
       cities.push(newCity);
