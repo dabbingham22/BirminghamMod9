@@ -52,7 +52,7 @@ class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
   private baseURL?: string;
   private apiKey?: string;
-  private cityName: string;
+  private cityName = '';
 
   constructor(){
     this.baseURL = process.env.API_BASE_URL || "";
@@ -79,7 +79,7 @@ class WeatherService {
   // TODO: Create buildGeocodeQuery method
   private buildGeocodeQuery(): string {
     //http://api.openweathermap.org/geo/1.0/direct?q=London&limit=5&appid={API key}
-    const URL = `${this.baseURL}/geo/1.0/direct?q=${this.cityName}&limit=5&appid=${this.apiKey}&units=imperial`
+    const URL = `${this.baseURL}/geo/1.0/direct?q=${encodeURIComponent(this.cityName)}&limit=5&appid=${this.apiKey}`
     return URL;
   }
     //
@@ -116,10 +116,10 @@ class WeatherService {
 
     const currentWeather = this.parseCurrentWeather(data);
     const forecastArray = this.buildForecastArray(data.list[0],data.list);
-    return {
+    return [
       currentWeather,
       forecastArray
-    };
+    ];
   } catch (error) {
     console.error('Error fetching weather data');
     throw error;

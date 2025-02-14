@@ -31,23 +31,14 @@ class HistoryService {
       return await fs.writeFile('searchHistory.json', JSON.stringify(cities, null, '\t'));
     };
   // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
-    async getCities() {
-      return await this.read().then((cities) => {
-        let parsedCities : City[];
-
-        try {
-          if (typeof cities === 'string') {
-          parsedCities = [].concat(JSON.parse(cities));
-        } else {
-          parsedCities = cities;
-        }
-      } 
-        catch (err) {
-          parsedCities = [];
-        }
-
-        return parsedCities;
-      });
+    async getCities(): Promise<City[]> {
+      try {
+        const cities = await this.read();
+        return cities;
+      } catch (error) {
+        console.error('Error retrieving cities:', error);
+        return [];
+      }
     }
   // TODO Define an addCity method that adds a city to the searchHistory.json file
     async addCity(city: string) {

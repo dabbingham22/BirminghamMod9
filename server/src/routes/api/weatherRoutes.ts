@@ -9,9 +9,7 @@ router.post('/', async (req: Request, res: Response) => {
   const { cityName } = req.body;
   if(cityName) {
     try{
-      const weatherData = await WeatherService.getWeatherForCity(cityName).then((data) =>{
-        res.json(data)
-    })
+      const weatherData = await WeatherService.getWeatherForCity(cityName);
 
       await HistoryService.addCity(cityName);
 
@@ -37,7 +35,7 @@ router.post('/', async (req: Request, res: Response) => {
 
 
 
-  const history = await fetch('https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={f12dbee1}', {
+  const history = await fetch('https://api.openweathermap.org/data/2.5/forecast?lat=&lon={lon}&appid={f12dbee1}', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +45,7 @@ router.post('/', async (req: Request, res: Response) => {
     //add fetch 
   // TODO: save city to search history
   // console.log(req, res);
-  res.send("testing");
+  //res.send("testing");
 });
 
 // TODO: GET search history
@@ -66,7 +64,7 @@ router.get('/history', async (_req: Request, res: Response) => {
 router.delete('/history/:id', async (req: Request, res: Response) => {
   try{
     if(!req.params.id) {
-      res.status(400).json({ msg: 'City id is required'});
+     res.status(400).json({ msg: 'City id is required'});
     }
     await HistoryService.removeCity(req.params.id);
     res.json({ success: 'City has been removed successfully'})
