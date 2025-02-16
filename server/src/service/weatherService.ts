@@ -136,6 +136,7 @@ class WeatherService {
       date: new Date().toISOString().split('T')[0],
       city: cityName,
       temperature: weatherInfo.main.temp,
+      windSpeed: weatherInfo.wind.speed,
       humidity: weatherInfo.main.humidity,
       description: weatherInfo.weather[0].description,
       icon: weatherInfo.weather[0].icon,
@@ -158,7 +159,7 @@ class WeatherService {
 
   // forecastArray.push(currentForecast);
 
-  for (let i = 1; i < weatherData.length; i++) {    
+  for (let i = 1; i < weatherData.length; i+=8) {   
     const forecast = weatherData[i];
     const forecastEntry: Forecast = {
       date: forecast.dt_txt,
